@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+</head>
+<body>
+  <div class="new-game-title">
+    <h2>New game</h2>
+  </div>
+  <div class="letters">
+    <% 10.times do %>
+      <% @letters << @alphabet.sample %>
+    <% end %>
+
+    <% hidden_field_tag 'grid-letters', @letters %>
+
+    <% @letters.each do |letter|%>
+      <%@grid += letter%>
+      <div class="letter">
+        <h4><%= letter.capitalize %></h4>
+      </div>
+    <% end %>
+  </div>
+  <div class="rule">
+    <p>Find the longest word you can write with those letters.</p>
+  </div>
+  <div class="form-word">
+    <form class="form-inline" action="/score">
+      <div class="form-group">
+        <input type="text" class="form-control" name="word" id="inputWord">
+        <input name="grid" type="hidden" value=<%= @grid %>>
+      </div>
+      <button type="submit" class="btn btn-primary">Play</button>
+    </form>
+  </div>
+</body>
+</html>

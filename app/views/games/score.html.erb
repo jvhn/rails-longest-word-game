@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+</head>
+<body>
+  <div class='container'>
+    <% @grid = params[:grid].split('') %>
+    <% @gridcopy = params[:grid].split('') %>
+    <% @gridsize = @grid.size %>
+    <% @word = params[:word].split('') %>
+
+    <% @displayindex = 0 %>
+
+    <% @grid.each_with_index do |letter, index| %>
+      <% if @word.include?(letter) %>
+        <% @gridcopy.delete_at(index) %>
+      <% elsif @gridcopy.size == @gridsize - @word.size %>
+        <% file = open("https://wagon-dictionary.herokuapp.com/#{params[:word]}").read%>
+        <% doc = JSON.parse(file)%>
+        <% if doc["found"] == false %>
+          <% @displayindex = 1 %>
+        <% else %>
+        <% @displayindex = 2 %>
+        <% end %>
+      <% elsif !@word.include?(letter)%>
+      <% @displayindex = 3 %>
+      <% end %>
+    <% end %>
+
+    <% if @displayindex == 1 %>
+      <p>Sorry but <strong><%=params[:word]%></strong> does not seem to be a validEnglish word!</p>
+    <% elsif @displayindex == 2 %>
+      <p><strong>Congratulations!</strong> <%=params[:word]%> is a valid English word!</p>
+    <% elsif @displayindex == 3 %>
+      <p>Sorry but <strong><%=params[:word]%></strong> can't be built out of: <%= @grid %></p>
+    <% end %>
+    <%= link_to "Play again", "/new" %>
+  </div>
+</body>
+</html>
