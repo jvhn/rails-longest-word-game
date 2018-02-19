@@ -30,10 +30,18 @@
 
     <% if @displayindex == 1 %>
       <p>Sorry but <strong><%=params[:word]%></strong> does not seem to be a validEnglish word!</p>
+      <p><strong>Total score:</strong> <%=session[:score]%></p>
     <% elsif @displayindex == 2 %>
       <p><strong>Congratulations!</strong> <%=params[:word]%> is a valid English word!</p>
+      <% if session[:score] %>
+        <% session[:score] += @word.size ** 2%>
+      <% else %>
+        <% session[:score] = @word.size ** 2%>
+      <% end %>
+      <p><strong>Total score:</strong> <%=session[:score]%></p>
     <% elsif @displayindex == 3 %>
       <p>Sorry but <strong><%=params[:word]%></strong> can't be built out of: <%= @grid %></p>
+      <p><strong>Total score:</strong> <%=session[:score]%></p>
     <% end %>
     <%= link_to "Play again", "/new" %>
   </div>
